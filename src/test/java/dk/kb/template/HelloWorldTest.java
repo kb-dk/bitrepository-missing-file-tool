@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.Test;
 
-import dk.kb.template.TemplateMain.LangEnum;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 
@@ -16,7 +14,7 @@ import java.net.URL;
 
 public class HelloWorldTest {
 
-    @Tag("fast")
+    /*@Tag("fast")
     @Test
     @DisplayName("Hello from Mr. Hyde")
     public void mrHyde() throws IOException{
@@ -24,7 +22,7 @@ public class HelloWorldTest {
         String message = myHello.sayHello("Mr. Hyde",50,"Dr. Jekyll",LangEnum.EN);
         System.out.println(message);       
         assertEquals("Hello Mr. Hyde, you are 50 says Dr. Jekyll", message);    
-    }
+    }*/
     
     @Tag("fast")
     @Test
