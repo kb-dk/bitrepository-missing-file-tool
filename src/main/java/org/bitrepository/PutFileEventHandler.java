@@ -5,7 +5,7 @@ import org.bitrepository.client.eventhandler.OperationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GetFileEventHandler implements EventHandler {
+public class PutFileEventHandler implements EventHandler {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final Object finishLock = new Object();
@@ -18,11 +18,11 @@ public class GetFileEventHandler implements EventHandler {
         log.info("Got event from client: {}", event.getEventType());
         switch (event.getEventType()) {
             case COMPLETE:
-                log.info("Finished getting file '{}'", event.getFileID());
+                log.info("Finished put fileID for file '{}'", event.getFileID());
                 finish();
                 break;
             case FAILED:
-                log.info("Finished getting file '{}'", event.getFileID());
+                log.info("Failed put fileID for file '{}'", event.getFileID());
                 failed = true;
                 finish();
                 break;
@@ -40,7 +40,7 @@ public class GetFileEventHandler implements EventHandler {
             log.trace("Finish method entered synchronized block");
             finished = true;
             finishLock.notifyAll();
-            log.trace("Finish method notified all");
+            log.trace("Finish method notified All");
         }
     }
 

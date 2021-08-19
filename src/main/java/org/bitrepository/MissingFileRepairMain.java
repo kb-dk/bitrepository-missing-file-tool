@@ -34,7 +34,7 @@ public class MissingFileRepairMain implements Callable<Integer> {
         Path configDir = Path.of(configDirProp);
         Path clientCert = configDir.resolve(CLIENT_CERTIFICATE_FILE);
         BitmagUtils.initialize(configDir, clientCert);
-        MissingFileRepairTool tool = new MissingFileRepairTool();
+        MissingFileRepairTool tool = new MissingFileRepairTool(fileID);
         tool.repairMissingFile(fileID, checksum, collectionID);
         return 0;
     }
