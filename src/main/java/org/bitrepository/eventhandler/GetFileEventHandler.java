@@ -1,4 +1,4 @@
-package org.bitrepository;
+package org.bitrepository.eventhandler;
 
 import org.bitrepository.client.eventhandler.EventHandler;
 import org.bitrepository.client.eventhandler.OperationEvent;
@@ -63,7 +63,7 @@ public class GetFileEventHandler implements EventHandler {
      * The method should not be called prior to a call to {@link #waitForFinish()} have returned.
      * @return true if the operation succeeded, otherwise false.
      */
-    public boolean hasFailed() {
-        return failed;
+    public boolean isOperationSuccess() {
+        return !failed;
     }
 }
