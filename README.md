@@ -12,7 +12,7 @@ directory as `start-script.sh`.
 
 In order to run the script, you must provide a client certificate and reference-/repository settings 
 with the necessary info to communicate with your Bitrepository-instance.  
-These should be located in the `conf` directory and named specifically as follows:
+These should be located in the unpacked build's `conf` directory and named specifically as follows:
 * `conf/`
   * `client-certificate.pem`
   * `ReferenceSettings.xml`
