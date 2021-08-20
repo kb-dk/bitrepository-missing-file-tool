@@ -113,6 +113,8 @@ public class MissingFileTool {
 
             if (eventHandler.isOperationSuccess()) {
                 isRepairSuccess = true;
+                System.out.println("Successfully repaired missing file '" + fileID + "' (" + checksum
+                        + ") in collection '" + collectionID + "'");
                 log.debug("Successfully put file '{}' ({}) in collection '{}'", fileID, checksum, collectionID);
             } else {
                 System.err.println("Failed while trying to put file '" + fileID
