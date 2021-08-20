@@ -22,11 +22,13 @@ public class MissingFileTool {
     private final FileExchange fileExchange;
     private final String tempExchangeFileID;
     private final URL exchangeUrlForFile;
+    private boolean isRepairSuccess;
 
     public MissingFileTool(String fileID) throws MalformedURLException {
         fileExchange = BitmagUtils.getFileExchange();
         tempExchangeFileID = fileID + UUID.randomUUID();
         exchangeUrlForFile = fileExchange.getURL(tempExchangeFileID);
+        isRepairSuccess = false;
     }
 
     /**
@@ -35,13 +37,15 @@ public class MissingFileTool {
      * @param fileID ID of the file to repair
      * @param checksum Checksum of file
      * @param collectionID The collection of the file
+     * @return boolean signaling if the repair was a success
      */
-    public void repairMissingFile(String fileID, String checksum, String collectionID) {
+    public boolean repairMissingFile(String fileID, String checksum, String collectionID) {
         File file = getFile(fileID, collectionID);
         if (file != null) {
             putFile(file, fileID, checksum, collectionID);
         }
         cleanUpFileExchange();
+        return isRepairSuccess;
     }
 
     /**
@@ -65,7 +69,7 @@ public class MissingFileTool {
                 log.debug("Successfully got file '{}'. Saved locally at {}", fileID, localResult.getAbsolutePath());
                 return localResult;
             } else {
-                System.out.println("Failed when trying to get file '" + fileID
+                System.err.println("Failed when trying to get file '" + fileID
                         + "' from collection '" + collectionID + "'");
             }
         } catch (InterruptedException e) {
@@ -108,9 +112,10 @@ public class MissingFileTool {
             eventHandler.waitForFinish();
 
             if (eventHandler.isOperationSuccess()) {
+                isRepairSuccess = true;
                 log.debug("Successfully put file '{}' ({}) in collection '{}'", fileID, checksum, collectionID);
             } else {
-                System.out.println("Failed while trying to put file '" + fileID
+                System.err.println("Failed while trying to put file '" + fileID
                         + "' (" + checksum + ") into collection '" + collectionID + "'");
             }
         } catch (InterruptedException e) {

@@ -1,30 +1,30 @@
-# KB stand alone java template 
+# Missing File Tool
+Tool for repairing individual missing files in a Bitrepository collection.
 
-The repository is a template for a stand alone java application on KB. 
-Clone the repository and fix the names and namespacing to get the basic structure of your new application. 
-Change upstream and push your code to the new repository.
+## Building the project
+Compile and build the project by running `mvn clean package`.
 
-Repository includes:
-* Default java project structure
-* Simple hello world unit test
-* Maven pom.xml
-* Maven assembly plugin setup to produce default tar-ball structure
-* Jenkinsfile for OpenShift
+The build is then found in `target/missing-file-tool-{version}-distribution.tar.gz`.
 
-## Tests
-Unit tests are run using the surefire plugin (configured in the parent pom). 
-If you have unit tests that takes long to run, and don't want them to run when at every invocation of mvn package, annotate the testcase with `@Tag("slow")` in the java code. 
-To run all unit tests including the ones tagged as slow, enable the `allTests` maven profile: e.g. `mvn clean package -PallTests`.
+## Before running the tool
+After building the project and unpacking the distribution-tar, the tool can be found in the `bin` 
+directory as `start-script.sh`.
 
-## How to get going
-To get started on your new application start by the following steps:
-* Create a new empty git repository and clone it locally
-* In the project folder, run the following command to get the template files
-`git archive --format=tar --remote=ssh://git@sbprojects.statsbiblioteket.dk:7999/ark/stand-alone-java-template.git master | tar -x`
-* In pom.xml:
-    * Update groupId and artitifactId to reflect your new project
-    * Update scm section to reflect new git repository
-* Update the java code to reflect your new applications namespace
-* Update application env (`src/main/conf/appEnv.sh`) to mention the applications main-class, and name of config-file (if changed) 
-* Update standard logback configuration (`src/main/conf/logback.xml`) to create a logfile with a suitable name for the new application
-* Commit & push changes to the repository
+In order to run the script, you must provide a client certificate and reference-/repository settings 
+with the necessary info to communicate with your Bitrepository-instance.  
+These should be located in the `conf` directory and named specifically as follows:
+* `conf/`
+  * `client-certificate.pem`
+  * `ReferenceSettings.xml`
+  * `RepositorySettings.xml`
+
+It may be necessary to run `chmod +x start-script.sh` in order to run the tool.
+
+## Usage of tool
+The tool must be run from within the `scripts` directory.
+
+Run the tool as follows:  
+`./start-script.sh <fileID> <checksum> <collectionID>`
+
+E.g.:  
+`./start-script.sh testfile b1946ac92492d2347c6235b4d2611184 integrationtest1`

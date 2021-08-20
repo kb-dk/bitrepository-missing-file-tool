@@ -31,9 +31,7 @@ public class MissingFileToolMain implements Callable<Integer> {
 
         BitmagUtils.initialize(configDir, clientCert);
         MissingFileTool tool = new MissingFileTool(fileID);
-        tool.repairMissingFile(fileID, checksum, collectionID);
-
-        return 0;
+        return tool.repairMissingFile(fileID, checksum, collectionID) ? 0 : 1;
     }
 
     public static void main(String[] args) {
