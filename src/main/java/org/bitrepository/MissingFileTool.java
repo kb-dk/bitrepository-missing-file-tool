@@ -20,7 +20,7 @@ import java.util.UUID;
 public class MissingFileTool {
     private static final Logger log = LoggerFactory.getLogger(MissingFileTool.class);
     private final FileExchange fileExchange;
-    private final String tempExchangeFileID; // TODO: Is this even necessary? Spørg Kim om FileExchange/DAV ikke er ligeglad med, om filnavn matcher et andet/om der kan gå kludder i det.
+    private final String tempExchangeFileID;
     private final URL exchangeUrlForFile;
 
     public MissingFileTool(String fileID) throws MalformedURLException {
@@ -59,11 +59,14 @@ public class MissingFileTool {
                     "GetFile from missing-file-tool");
             eventHandler.waitForFinish();
 
-            boolean getIsSuccess = !eventHandler.isOperationSuccess();
+            boolean getIsSuccess = eventHandler.isOperationSuccess();
             if (getIsSuccess) {
-                return getFileFromExchange();
+                File localResult = getFileFromExchange();
+                log.debug("Successfully got file '{}'. Saved locally at {}", fileID, localResult.getAbsolutePath());
+                return localResult;
             } else {
-                System.out.println("Failed to get file '" + fileID + "'"); // TODO: throw stuff? Should somehow indicate 'fatal' error
+                System.out.println("Failed when trying to get file '" + fileID
+                        + "' from collection '" + collectionID + "'");
             }
         } catch (InterruptedException e) {
             log.error("Got interrupted while waiting for operation to complete");
@@ -87,6 +90,13 @@ public class MissingFileTool {
         return intermediateLocalFile;
     }
 
+    /**
+     * Attempts to put the given file into the collection.
+     * @param file Local version of the file to put
+     * @param fileID Name of the file
+     * @param checksum The files checksum
+     * @param collectionID The collection to put the file in
+     */
     public void putFile(File file, String fileID, String checksum, String collectionID) {
         PutFileClient client = BitmagUtils.getPutFileClient();
         PutFileEventHandler eventHandler = new PutFileEventHandler();
@@ -97,9 +107,11 @@ public class MissingFileTool {
                     null, eventHandler, "Put from missing-file-tool");
             eventHandler.waitForFinish();
 
-            // TODO print on operation success/failure
             if (eventHandler.isOperationSuccess()) {
-                // stuff
+                log.debug("Successfully put file '{}' ({}) in collection '{}'", fileID, checksum, collectionID);
+            } else {
+                System.out.println("Failed while trying to put file '" + fileID
+                        + "' (" + checksum + ") into collection '" + collectionID + "'");
             }
         } catch (InterruptedException e) {
             log.error("Got interrupted while waiting for operation to complete");

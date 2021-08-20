@@ -9,13 +9,13 @@
   </parent>
 
   <groupId>org.bitrepository</groupId>
-  <artifactId>file-repair-tool</artifactId>
+  <artifactId>missing-file-tool</artifactId>
   <version>0.1-SNAPSHOT</version>
 
   <scm>
-    <url>https://sbprojects.statsbiblioteket.dk/stash/projects/ARK/repos/stand-alone-java-template/browse</url>
-    <connection>scm:git:ssh://git@sbprojects.statsbiblioteket.dk:7999/ark/stand-alone-java-template.git</connection>
-    <developerConnection>scm:git:ssh://git@sbprojects.statsbiblioteket.dk:7999/ark/stand-alone-java-template.git</developerConnection>
+    <url>https://github.com/kb-dk/bitrepository-missing-file-tool</url>
+    <connection>scm:git:git://github.com/kb-dk/bitrepository-missing-file-tool.git</connection>
+    <developerConnection>scm:git:git://github.com/kb-dk/bitrepository-missing-file-tool.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
