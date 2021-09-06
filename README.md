@@ -24,7 +24,7 @@ It may be necessary to run `chmod +x start-script.sh` in order to run the tool.
 The tool must be run from within the `scripts` directory.
 
 Run the tool as follows:  
-`./start-script.sh <fileID> <checksum> <collectionID>`
+`./start-script.sh <collectionID> <checksum> <fileID>`
 
 E.g.:  
-`./start-script.sh testfile b1946ac92492d2347c6235b4d2611184 integrationtest1`
+`./start-script.sh integrationtest1 b1946ac92492d2347c6235b4d2611184 testfile`

@@ -24,9 +24,9 @@ public class MissingFileTool {
     private final URL exchangeUrlForFile;
     private boolean isRepairSuccess;
 
-    public MissingFileTool(String fileID) throws MalformedURLException {
+    public MissingFileTool() throws MalformedURLException {
         fileExchange = BitmagUtils.getFileExchange();
-        tempExchangeFileID = fileID + UUID.randomUUID();
+        tempExchangeFileID = UUID.randomUUID().toString();
         exchangeUrlForFile = fileExchange.getURL(tempExchangeFileID);
         isRepairSuccess = false;
     }

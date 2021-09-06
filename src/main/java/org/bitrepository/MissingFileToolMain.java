@@ -9,17 +9,17 @@ import java.util.concurrent.Callable;
 @CommandLine.Command()
 public class MissingFileToolMain implements Callable<Integer> {
 
-    /* Name of the file that we attempt to repair */
-    @CommandLine.Parameters(index = "0", type = String.class)
-    private String fileID;
-
     /* Name of the collection the file should be in */
+    @CommandLine.Parameters(index = "0", type = String.class)
+    private String collectionID;
+
+    /* Checksum of the file to repair */
     @CommandLine.Parameters(index = "1", type = String.class)
     private String checksum;
 
-    /* Name of the collection the file should be in */
+    /* Name of the file that we attempt to repair */
     @CommandLine.Parameters(index = "2", type = String.class)
-    private String collectionID;
+    private String fileID;
 
     @Override
     public Integer call() throws Exception {
@@ -30,7 +30,7 @@ public class MissingFileToolMain implements Callable<Integer> {
         Path clientCert = configDir.resolve(clientCertFileName);
 
         BitmagUtils.initialize(configDir, clientCert);
-        MissingFileTool tool = new MissingFileTool(fileID);
+        MissingFileTool tool = new MissingFileTool();
         return tool.repairMissingFile(fileID, checksum, collectionID) ? 0 : 1;
     }
 
