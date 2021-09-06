@@ -2,7 +2,7 @@
 # Allow for customisations here (allows application runner to be effectively read-only)
 
 MAIN_CLASS=org.bitrepository.MissingFileToolMain
-APP_CONFIG=.
+APP_CONFIG=config.yaml
 
 #Optional parameter to override default JAVA_OPTS
 #JAVA_OPTS="-Xmx512m -Xms256m"

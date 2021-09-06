@@ -1,5 +1,6 @@
 package org.bitrepository;
 
+import dk.kb.util.yaml.YAML;
 import org.bitrepository.util.BitmagUtils;
 import picocli.CommandLine;
 
@@ -23,11 +24,11 @@ public class MissingFileToolMain implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        // Need to add -Dorg.bitrepository.configDir=src/main/conf to "VM options" when running
-        String clientCertFileName = "client-certificate.pem";
-        String configDirProp = System.getProperty("org.bitrepository.configDir");
-        Path configDir = Path.of(configDirProp);
-        Path clientCert = configDir.resolve(clientCertFileName);
+        // Need to add -Dorg.bitrepository.configFile=src/main/conf/config.yaml to "VM options" when running
+        String configFileProp = System.getProperty("org.bitrepository.configFile");
+        YAML config = new YAML(configFileProp);
+        Path configDir = Path.of(config.getString("bitrepoConf.confDir"));
+        Path clientCert = Path.of(config.getString("bitrepoConf.certFile"));
 
         BitmagUtils.initialize(configDir, clientCert);
         MissingFileTool tool = new MissingFileTool();
