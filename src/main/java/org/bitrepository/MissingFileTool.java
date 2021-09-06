@@ -10,7 +10,6 @@ import org.bitrepository.util.BitmagUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -40,88 +39,76 @@ public class MissingFileTool {
      * @return boolean signaling if the repair was a success
      */
     public boolean repairMissingFile(String fileID, String checksum, String collectionID) {
-        File file = getFile(fileID, collectionID);
-        if (file != null) {
-            putFile(file, fileID, checksum, collectionID);
+        try {
+            boolean getIsSuccess = getFileToExchange(fileID, collectionID);
+            if (getIsSuccess) {
+                putFileFromExchange(fileID, checksum, collectionID);
+            }
+        } catch (Exception e) {
+            log.error("Something went wrong while trying to repair file '{}' ({}) in collection '{}'",
+                    fileID, checksum, collectionID);
+        } finally {
+            cleanUpFileExchange();
         }
-        cleanUpFileExchange();
         return isRepairSuccess;
     }
 
     /**
-     * Attempts to get a file with the given ID.
+     * Attempts to download a file with the given ID to the file exchange.
      * @param fileID ID/name of the file to get
      * @param collectionID Name of the collection to get it from
-     * @return The downloaded local file if successful, otherwise null
+     * @return boolean status of the operation. False if failed, true if success.
      */
-    public File getFile(String fileID, String collectionID) {
+    public boolean getFileToExchange(String fileID, String collectionID) {
         GetFileClient client = BitmagUtils.getFileClient();
         GetFileEventHandler eventHandler = new GetFileEventHandler();
+        boolean getIsSuccess = false;
 
         try {
             client.getFileFromFastestPillar(collectionID, fileID, null, exchangeUrlForFile, eventHandler,
                     "GetFile from missing-file-tool");
             eventHandler.waitForFinish();
 
-            boolean getIsSuccess = eventHandler.isOperationSuccess();
+            getIsSuccess = eventHandler.isOperationSuccess();
             if (getIsSuccess) {
-                File localResult = getFileFromExchange();
-                log.debug("Successfully got file '{}'. Saved locally at {}", fileID, localResult.getAbsolutePath());
-                return localResult;
+                log.debug("Successfully got file '{}' to file exchange.", fileID);
             } else {
                 System.err.println("Failed when trying to get file '" + fileID
                         + "' from collection '" + collectionID + "'");
             }
         } catch (InterruptedException e) {
-            log.error("Got interrupted while waiting for operation to complete");
+            log.error("Got interrupted while waiting for get-operation to complete");
         }
-        return null;
+        return getIsSuccess;
     }
 
     /**
-     * Requests to get the file at URL specificed by {@link #exchangeUrlForFile}
-     * and returns the result in a locally created file.
-     * @return A local instance of the requested file
-     */
-    private File getFileFromExchange() {
-        File intermediateLocalFile = null;
-        try {
-            intermediateLocalFile = File.createTempFile(UUID.randomUUID().toString(), "");
-        } catch (IOException e) {
-            log.error("Can't create intermediate temp file");
-        }
-        fileExchange.getFile(intermediateLocalFile, exchangeUrlForFile.toExternalForm());
-        return intermediateLocalFile;
-    }
-
-    /**
-     * Attempts to put the given file into the collection.
-     * @param file Local version of the file to put
+     * Attempts to put the given file from the file exchange into the given collection.
      * @param fileID Name of the file
      * @param checksum The files checksum
      * @param collectionID The collection to put the file in
      */
-    public void putFile(File file, String fileID, String checksum, String collectionID) {
+    public void putFileFromExchange(String fileID, String checksum, String collectionID) {
         PutFileClient client = BitmagUtils.getPutFileClient();
         PutFileEventHandler eventHandler = new PutFileEventHandler();
         ChecksumDataForFileTYPE checksumData = BitmagUtils.getChecksum(checksum);
 
         try {
-            client.putFile(collectionID, exchangeUrlForFile, fileID, file.length(), checksumData,
+            client.putFile(collectionID, exchangeUrlForFile, fileID, 0, checksumData,
                     null, eventHandler, "Put from missing-file-tool");
             eventHandler.waitForFinish();
 
             if (eventHandler.isOperationSuccess()) {
                 isRepairSuccess = true;
+                log.debug("Successfully put file '{}' ({}) in collection '{}'", fileID, checksum, collectionID);
                 System.out.println("Successfully repaired missing file '" + fileID + "' (" + checksum
                         + ") in collection '" + collectionID + "'");
-                log.debug("Successfully put file '{}' ({}) in collection '{}'", fileID, checksum, collectionID);
             } else {
                 System.err.println("Failed while trying to put file '" + fileID
                         + "' (" + checksum + ") into collection '" + collectionID + "'");
             }
         } catch (InterruptedException e) {
-            log.error("Got interrupted while waiting for operation to complete");
+            log.error("Got interrupted while waiting for put-operation to complete");
         }
     }
 
