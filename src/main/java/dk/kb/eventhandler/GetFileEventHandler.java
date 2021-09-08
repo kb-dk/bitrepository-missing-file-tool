@@ -1,5 +1,6 @@
-package org.bitrepository.eventhandler;
+package dk.kb.eventhandler;
 
+import org.bitrepository.client.eventhandler.ContributorFailedEvent;
 import org.bitrepository.client.eventhandler.EventHandler;
 import org.bitrepository.client.eventhandler.OperationEvent;
 import org.slf4j.Logger;
@@ -21,8 +22,12 @@ public class GetFileEventHandler implements EventHandler {
                 log.info("Finished getting file '{}'", event.getFileID());
                 finish();
                 break;
+            case COMPONENT_FAILED:
+                ContributorFailedEvent failedEvent = (ContributorFailedEvent) event;
+                log.info("Component '{}' failed due to: {}", failedEvent.getContributorID(), failedEvent.getInfo());
+                break;
             case FAILED:
-                log.info("Finished getting file '{}'", event.getFileID());
+                log.info("Failed getting file '{}'", event.getFileID());
                 failed = true;
                 finish();
                 break;

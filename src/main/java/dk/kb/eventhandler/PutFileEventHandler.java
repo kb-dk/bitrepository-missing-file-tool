@@ -1,5 +1,6 @@
-package org.bitrepository.eventhandler;
+package dk.kb.eventhandler;
 
+import org.bitrepository.client.eventhandler.ContributorFailedEvent;
 import org.bitrepository.client.eventhandler.EventHandler;
 import org.bitrepository.client.eventhandler.OperationEvent;
 import org.slf4j.Logger;
@@ -26,6 +27,9 @@ public class PutFileEventHandler implements EventHandler {
                 failed = true;
                 finish();
                 break;
+            case COMPONENT_FAILED:
+                ContributorFailedEvent failedEvent = (ContributorFailedEvent) event;
+                log.info("Component '{}' failed due to: {}", failedEvent.getContributorID(), failedEvent.getInfo());
             default:
                 break;
         }
