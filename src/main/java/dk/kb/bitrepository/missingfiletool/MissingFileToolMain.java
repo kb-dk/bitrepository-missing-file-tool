@@ -1,7 +1,7 @@
-package dk.kb;
+package dk.kb.bitrepository.missingfiletool;
 
 import dk.kb.util.yaml.YAML;
-import dk.kb.util.BitmagUtils;
+import dk.kb.bitrepository.missingfiletool.util.BitmagUtils;
 import picocli.CommandLine;
 
 import java.nio.file.Path;
