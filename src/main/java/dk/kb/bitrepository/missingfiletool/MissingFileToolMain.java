@@ -1,7 +1,7 @@
-package org.bitrepository;
+package dk.kb.bitrepository.missingfiletool;
 
 import dk.kb.util.yaml.YAML;
-import org.bitrepository.util.BitmagUtils;
+import dk.kb.bitrepository.missingfiletool.util.BitmagUtils;
 import picocli.CommandLine;
 
 import java.nio.file.Path;
@@ -24,8 +24,8 @@ public class MissingFileToolMain implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        // Need to add -Dorg.bitrepository.configFile=src/main/conf/config.yaml to "VM options" when running
-        String configFileProp = System.getProperty("org.bitrepository.configFile");
+        // Need to add -Ddk.kb.configFile=src/main/conf/config.yaml to "VM options" when running
+        String configFileProp = System.getProperty("dk.kb.configFile");
         YAML config = new YAML(configFileProp);
         Path configDir = Path.of(config.getString("bitrepoConf.confDir"));
         Path clientCert = Path.of(config.getString("bitrepoConf.certFile"));

@@ -1,4 +1,4 @@
-package org.bitrepository.util;
+package dk.kb.bitrepository.missingfiletool.util;
 
 import org.bitrepository.access.AccessComponentFactory;
 import org.bitrepository.access.getchecksums.GetChecksumsClient;

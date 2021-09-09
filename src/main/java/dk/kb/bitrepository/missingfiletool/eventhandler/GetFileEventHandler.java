@@ -1,11 +1,12 @@
-package org.bitrepository.eventhandler;
+package dk.kb.bitrepository.missingfiletool.eventhandler;
 
+import org.bitrepository.client.eventhandler.ContributorFailedEvent;
 import org.bitrepository.client.eventhandler.EventHandler;
 import org.bitrepository.client.eventhandler.OperationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PutFileEventHandler implements EventHandler {
+public class GetFileEventHandler implements EventHandler {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final Object finishLock = new Object();
@@ -18,11 +19,15 @@ public class PutFileEventHandler implements EventHandler {
         log.info("Got event from client: {}", event.getEventType());
         switch (event.getEventType()) {
             case COMPLETE:
-                log.info("Finished put fileID for file '{}'", event.getFileID());
+                log.info("Finished getting file '{}'", event.getFileID());
                 finish();
                 break;
+            case COMPONENT_FAILED:
+                ContributorFailedEvent failedEvent = (ContributorFailedEvent) event;
+                log.info("Component '{}' failed due to: {}", failedEvent.getContributorID(), failedEvent.getInfo());
+                break;
             case FAILED:
-                log.info("Failed put fileID for file '{}'", event.getFileID());
+                log.info("Failed getting file '{}'", event.getFileID());
                 failed = true;
                 finish();
                 break;
@@ -40,7 +45,7 @@ public class PutFileEventHandler implements EventHandler {
             log.trace("Finish method entered synchronized block");
             finished = true;
             finishLock.notifyAll();
-            log.trace("Finish method notified All");
+            log.trace("Finish method notified all");
         }
     }
 

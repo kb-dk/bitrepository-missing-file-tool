@@ -1,12 +1,12 @@
-package org.bitrepository;
+package dk.kb.bitrepository.missingfiletool;
 
 import org.bitrepository.access.getfile.GetFileClient;
 import org.bitrepository.bitrepositoryelements.ChecksumDataForFileTYPE;
-import org.bitrepository.eventhandler.GetFileEventHandler;
-import org.bitrepository.eventhandler.PutFileEventHandler;
+import dk.kb.bitrepository.missingfiletool.eventhandler.GetFileEventHandler;
+import dk.kb.bitrepository.missingfiletool.eventhandler.PutFileEventHandler;
 import org.bitrepository.modify.putfile.PutFileClient;
 import org.bitrepository.protocol.FileExchange;
-import org.bitrepository.util.BitmagUtils;
+import dk.kb.bitrepository.missingfiletool.util.BitmagUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
