@@ -3,5 +3,7 @@ target/
 .project
 .settings/
 .idea/
-
 *.iml
+src/main/conf/ReferenceSettings.xml
+src/main/conf/RepositorySettings.xml
+src/main/conf/client-certificate.pem
