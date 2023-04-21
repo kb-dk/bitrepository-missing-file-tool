@@ -23,11 +23,11 @@ import org.bitrepository.protocol.messagebus.MessageBus;
 import org.bitrepository.protocol.messagebus.MessageBusManager;
 import org.bitrepository.protocol.security.BasicMessageAuthenticator;
 import org.bitrepository.protocol.security.BasicMessageSigner;
-import org.bitrepository.protocol.security.BasicOperationAuthorizor;
+import org.bitrepository.protocol.security.BasicOperationAuthorizer;
 import org.bitrepository.protocol.security.BasicSecurityManager;
 import org.bitrepository.protocol.security.MessageAuthenticator;
 import org.bitrepository.protocol.security.MessageSigner;
-import org.bitrepository.protocol.security.OperationAuthorizor;
+import org.bitrepository.protocol.security.OperationAuthorizer;
 import org.bitrepository.protocol.security.PermissionStore;
 import org.bitrepository.protocol.security.SecurityManager;
 import org.bitrepository.settings.referencesettings.FileExchangeSettings;
@@ -82,7 +82,7 @@ public class BitmagUtils {
         PermissionStore permissionStore = new PermissionStore();
         MessageAuthenticator authenticator = new BasicMessageAuthenticator(permissionStore);
         MessageSigner signer = new BasicMessageSigner();
-        OperationAuthorizor authorizer = new BasicOperationAuthorizor(permissionStore);
+        OperationAuthorizer authorizer = new BasicOperationAuthorizer(permissionStore);
         return new BasicSecurityManager(settings.getRepositorySettings(), certificate.toString(),
                 authenticator, signer, authorizer, permissionStore,
                 settings.getComponentID());
